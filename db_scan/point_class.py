@@ -1,56 +1,44 @@
-class point(object):
-
-    #float number coordinate
+class Point(object):
+# float number coordinate
     __coordinate = []
     __in_cluster = False
     __cluster_name = None
-    
-    
-    def __init__(self,*cor):
+    __is_edge = False
+
+    def __init__(self, *cor):
         self.__coordinate = cor
-        
-        
-    def setCoordinate(self,*arg):
+
+    def set_coordinate(self, *arg):
         self.__coordinate = arg
 
-    def showPoint(self):
-        print self.__coordinate
+    def show_point(self):
+        print(self.__coordinate)
         
-    def isInCluster(self):
+    def is_in_cluster(self):
         return self.__in_cluster
         
-    def getCluster(self):
-        if(self.__in_cluster == True):
+    def get_cluster(self):
+        if self.__in_cluster:
             return self.__cluster_name
         else:
             return None
             
-    def setCluster(self,cName):
-        if(isinstance(cName,str) == False):
-            raise Exception('Incorrect class name. Name should be a string variable')
-            return False
-        else:
-            if(self.__in_cluster == True):
-                print "Previous cluster: %s, currently set: %s" %(self.__cluster_name, cName)
+    def set_cluster(self, cname):
+        if isinstance(cname, str):
+            if self.__in_cluster:
+                print("Previous cluster: %s, currently set: %s" % (self.__cluster_name, cname))
+            else:
+                raise Exception('Incorrect class name. Name should be a string variable')
             
-            self.__cluster_name = cName
+            self.__cluster_name = cname
             self.__in_cluster = True
             return True
-            
-            
-            
-        
-        
-pt = point(1,2,3,4,5)
-print pt.getCluster()
-print pt.isInCluster()
-print pt.setCluster("hahaha")
-print pt.getCluster()
-print pt.isInCluster()
-print pt.setCluster("xaxaa")
-print pt.getCluster()
-print pt.setCluster(2)
 
-      
-                
-        
+    def set_edge(self):
+        self.__is_edge = True
+
+    def is_edge(self):
+        return self.__is_edge
+            
+
+
