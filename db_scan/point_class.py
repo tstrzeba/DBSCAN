@@ -35,6 +35,10 @@ class Point(object):
         else:
                 raise Exception('Incorrect class name. Name should be a string variable')
 
+    def reset_cluster(self):
+        self.__cluster_name = None
+        self.__in_cluster = False
+
     def set_edge(self):
         self.__is_edge = True
 
@@ -57,6 +61,7 @@ class Point(object):
 class PointArray(object):
 
     __point_array = []
+    __iterator = 0
 
     def __init__(self, points):
         index = 0
@@ -66,6 +71,17 @@ class PointArray(object):
             pt.set_index(index)
             self.__point_array.append(pt)
             index += 1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.__iterator > len(self.__point_array)-1:
+            self.__iterator = 0
+            raise StopIteration
+        else:
+            self.__iterator += 1
+            return self.__point_array[self.__iterator-1]
 
     def show(self):
         print(self.__point_array)
@@ -84,14 +100,21 @@ class PointArray(object):
         else:
             return False
 
-    def find_unclustered_point(self):
+    def find_unclustered_point(self, recent_point):
         for p in self.__point_array:
+            if p == recent_point:
+                continue
             if not p.is_in_cluster():
                 return p
-        return None
+        return False
 
     def __len__(self):
         return len(self.__point_array)
+
+    def remove_points_from_cluster(self, cluster_name):
+        for p in self.__point_array:
+            if p.get_cluster() == cluster_name:
+                p.reset_cluster()
 
 
 
