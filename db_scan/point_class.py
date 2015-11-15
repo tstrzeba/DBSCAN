@@ -84,6 +84,15 @@ class PointArray(object):
         else:
             return False
 
+    def find_unclustered_point(self):
+        for p in self.__point_array:
+            if not p.is_in_cluster():
+                return p
+        return None
+
+    def __len__(self):
+        return len(self.__point_array)
+
 
 
 

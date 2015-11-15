@@ -24,7 +24,7 @@ class ClusterMap(object):
         if self.__map_list:
             print("Exist")
 
-    def add_map(self,cn1, cn2):
+    def add_map(self, cn1, cn2):
         self.__map_list.append([cn1, cn2])
 
     def __compare__(self, x, y):
