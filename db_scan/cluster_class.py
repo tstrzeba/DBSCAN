@@ -73,7 +73,7 @@ class ClusterMap(object):
 
                 #print("I1 %d, I2 %d" % (index1, index2))
                 if self.__compare__(index1, index2):
-                    #self.__map_list.pop(index2)
+                    self.__map_list.pop(index2)
                     reduce_count += 1
 
                 index2 += 1
@@ -94,6 +94,15 @@ class ClusterMap(object):
                 return True
             index += 1
         return False
+
+    def remove_noise_cluster(self):
+        index = 0
+
+        for map in self.__map_list:
+            if map[0] == "NOISE" or map[1] == "NOISE":
+                self.__map_list.pop(index)
+            index += 1
+        return True
 
     def remove_map(self, cname1, cname2):
         index = 0
@@ -119,6 +128,9 @@ class ClusterMap(object):
 
     def print_map(self):
         print(self.__map_list)
+
+    def get_map(self):
+        return self.__map_list
 
 
 
