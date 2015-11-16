@@ -1,5 +1,5 @@
 class Point(object):
-# float number coordinate
+    # float number coordinate
     __coordinate = None
     __in_cluster = False
     __cluster_name = None
@@ -14,26 +14,26 @@ class Point(object):
 
     def show_point(self):
         print(self.__coordinate)
-        
+
     def is_in_cluster(self):
         return self.__in_cluster
-        
+
     def get_cluster(self):
         if self.__in_cluster:
             return self.__cluster_name
         else:
             return None
-            
+
     def set_cluster(self, cname):
         if isinstance(cname, str):
-            #if self.__in_cluster:
-                #print("Previous cluster: %s, currently set: %s" % (self.__cluster_name, cname))
+            # if self.__in_cluster:
+            # print("Previous cluster: %s, currently set: %s" % (self.__cluster_name, cname))
 
             self.__cluster_name = cname
             self.__in_cluster = True
             return True
         else:
-                raise Exception('Incorrect class name. Name should be a string variable')
+            raise Exception('Incorrect class name. Name should be a string variable')
 
     def reset_cluster(self):
         self.__cluster_name = None
@@ -59,14 +59,13 @@ class Point(object):
 
 
 class PointArray(object):
-
     __point_array = []
     __iterator = 0
 
     def __init__(self, points):
         index = 0
         for p in points:
-            #print(p)
+            # print(p)
             pt = Point(p)
             pt.set_index(index)
             self.__point_array.append(pt)
@@ -76,12 +75,12 @@ class PointArray(object):
         return self
 
     def __next__(self):
-        if self.__iterator > len(self.__point_array)-1:
+        if self.__iterator > len(self.__point_array) - 1:
             self.__iterator = 0
             raise StopIteration
         else:
             self.__iterator += 1
-            return self.__point_array[self.__iterator-1]
+            return self.__point_array[self.__iterator - 1]
 
     def show(self):
         print(self.__point_array)
@@ -89,14 +88,14 @@ class PointArray(object):
     def get_point(self, index):
         return self.__point_array.__getitem__(index)
 
-    #def __find_pint(self):
+    # def __find_pint(self):
 
     def get_next_point(self, current_point):
         ''' TODO - add iteration over previos point in case of multicore test (in case of start first point in the middle of
             array (eg. index 10) - remember that index 9 and less are not tested
         '''
-        if current_point.get_index() < len(self.__point_array)-1:
-            return self.get_point(current_point.get_index()+1)
+        if current_point.get_index() < len(self.__point_array) - 1:
+            return self.get_point(current_point.get_index() + 1)
         else:
             return False
 
@@ -116,10 +115,6 @@ class PointArray(object):
             if p.get_cluster() == cluster_name:
                 p.reset_cluster()
 
-
-
-
-
 # import test_array
 #
 #
@@ -130,5 +125,3 @@ class PointArray(object):
 # print("-----")
 #
 #
-
-

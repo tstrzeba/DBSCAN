@@ -1,5 +1,4 @@
 class Cluster(object):
-
     __cluster_name = None
     __is_mapped = False
 
@@ -17,7 +16,6 @@ class Cluster(object):
 
 
 class ClusterMap(object):
-
     __map_list = []
     __iterator = 0
 
@@ -29,23 +27,22 @@ class ClusterMap(object):
         return len(self.__map_list)
 
     def __iter__(self):
-        return self #self.__map_list
+        return self  # self.__map_list
 
     def __next__(self):
-        if self.__iterator > len(self.__map_list)-1:
+        if self.__iterator > len(self.__map_list) - 1:
             self.__iterator = 0
             raise StopIteration
         else:
             self.__iterator += 1
-            return self.__map_list[self.__iterator-1]
-
+            return self.__map_list[self.__iterator - 1]
 
     def add_map(self, cn1, cn2):
         self.__map_list.append([cn1, cn2])
 
     def rename_map(self, index, cn1, cn2):
         self.__map_list.pop(index)
-        self.__map_list.insert(index,[cn1,cn2])
+        self.__map_list.insert(index, [cn1, cn2])
 
     def __compare__(self, x, y):
         if x is None or y is None:
@@ -62,23 +59,23 @@ class ClusterMap(object):
         reduce_count = 0
         index1 = 0
         index2 = 1
-        print("LEN IS:"+str(len(self.__map_list)))
+        print("LEN IS:" + str(len(self.__map_list)))
         while True:
-            if index1 == len(self.__map_list)-1:
+            if index1 == len(self.__map_list) - 1:
                 break
 
             while True:
-                if index2 == len(self.__map_list)-1:
+                if index2 == len(self.__map_list) - 1:
                     break
 
-                #print("I1 %d, I2 %d" % (index1, index2))
+                # print("I1 %d, I2 %d" % (index1, index2))
                 if self.__compare__(index1, index2):
                     self.__map_list.pop(index2)
                     reduce_count += 1
 
                 index2 += 1
             index1 += 1
-            index2 = index1+1
+            index2 = index1 + 1
 
         return reduce_count
 
@@ -132,8 +129,6 @@ class ClusterMap(object):
     def get_map(self):
         return self.__map_list
 
-
-
 # cm = ClusterMap()
 # clus1 = Cluster("abc")
 # clus2 = Cluster("xyz")
@@ -162,4 +157,3 @@ class ClusterMap(object):
 # print("Reduced row count: %d" % cm.reduce_cluster())
 # print("Reduced row count: %d" % cm.reduce_cluster())
 # cm.print_map()
-
