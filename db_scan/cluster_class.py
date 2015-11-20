@@ -47,7 +47,10 @@ class ClusterMap(object):
     def __compare__(self, x, y):
         if x is None or y is None:
             return False
-
+            
+        print("maplist: " , self.__map_list )
+        
+        
         if self.__map_list[x][0] == self.__map_list[y][0] and self.__map_list[x][1] == self.__map_list[y][1]:
             return True
         elif self.__map_list[x][0] == self.__map_list[y][1] and self.__map_list[x][1] == self.__map_list[y][0]:

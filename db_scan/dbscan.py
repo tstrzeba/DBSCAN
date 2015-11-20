@@ -151,21 +151,21 @@ class DBscan(object):
         return final_list
 
 
-import test_array
-
-parr = PointArray(test_array.tablica)
-clustmap = ClusterMap()
-db = DBscan(parr, 0, clustmap, 2, 7)
-temp_list = db.start(CLUSTER_INDEX)
-print("temp_list", temp_list)
-
-for x in range(0, len(temp_list)):
-    print("Cluster %d contains points:" % x)
-    for ii in range(len(parr) - 1):
-        p = parr.get_point(ii)
-        if p.get_cluster() == "G" + str(x):
-            p.show_point()
-
-print("")
+#import test_array
+#
+#parr = PointArray(test_array.tablica)
+#clustmap = ClusterMap()
+#db = DBscan(parr, 0, clustmap, 2, 7)
+#temp_list = db.start(CLUSTER_INDEX)
+#print("temp_list", temp_list)
+#
+#for x in range(0, len(temp_list)):
+#    print("Cluster %d contains points:" % x)
+#    for ii in range(len(parr) - 1):
+#        p = parr.get_point(ii)
+#        if p.get_cluster() == "G" + str(x):
+#            p.show_point()
+#
+#print("")
 
 # print(db.calculate_dis(parr.get_point(0),parr.get_point(3)))
