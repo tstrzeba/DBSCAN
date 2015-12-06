@@ -1,16 +1,16 @@
 #################################################################################
 # generate data settings
 #################################################################################
-CENTERS = [[1, 1], [-1, -1], [1, -1]]
-N_SAMPLES = 150
+CENTERS = [[1, 1], [-1, -1], [1, -1], [5,5]]
+N_SAMPLES = 45
 CLUSTER_STD = 0.7
 RANDOM_STATE = 0
 
 #################################################################################
 # db_scan settings
 #################################################################################
-EPS = 0.4
-MIN_SAMPLES = 10
+EPS = 0.2
+MIN_SAMPLES = 5
 
 #################################################################################
 # sklearn
@@ -69,57 +69,55 @@ for k, col in zip(unique_labels, colors):
 
     xy = X[class_member_mask & core_samples_mask]
     plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=14)
+             markeredgecolor='k', markersize=10)
 
     xy = X[class_member_mask & ~core_samples_mask]
     plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=6)
+             markeredgecolor='k', markersize=10)
 
 plt.title('Sklearn - estimated number of clusters: %d' % n_clusters_)
 plt.grid()
-
 
 #################################################################################
 # our version
 #################################################################################
 import sys
-sys.path.append( "../db_scan" )
+
+sys.path.append("../db_scan")
 from cluster_class import ClusterMap
 from point_class import PointArray
-from dbscan import DBscan
-
+from dbscan2 import DBscan
+from dbscan2 import Point
 
 #################################################################################
 # Compute DBSCAN
 #################################################################################
 xx = X.tolist()
-parr = PointArray(xx)
-clustmap = ClusterMap()
-db = DBscan(point_array=parr, start_point_index= 0, cluster_map=clustmap, epsilon=EPS, min_neighbour=MIN_SAMPLES)
-temp_list = db.start(0)
+point_array = []
+for x in xx:
+    pt = Point(x[0], x[1])
+    point_array.append(pt)
+# db = DBscan(point_array=parr, start_point_index= 0, cluster_map=clustmap, epsilon=EPS, min_neighbour=MIN_SAMPLES)
+db = DBscan(point_array=point_array)
+clusters = db.start(points=point_array, eps=EPS, minPts=MIN_SAMPLES)
 
 #################################################################################
 # Plot result
 #################################################################################
 plt.subplot(212)
-colors = plt.cm.Spectral(np.linspace(0, 1, len(temp_list)))
-for x in range(0, len(temp_list)):
-    for ii in range(len(parr) - 1):
-        p = parr.get_point(ii)
-        if p.get_cluster() == "G" + str(x):
-            col = colors[x]
-            if p.is_edge() == True:
-                plt.plot(p.get_x(), p.get_y(), 'o',  markerfacecolor=col,
-                            markeredgecolor='k', markersize=6)
-            else:
-                 plt.plot(p.get_x(), p.get_y(), 'o',  markerfacecolor=col,
-                            markeredgecolor='k', markersize=14)
-        if p.get_cluster() == None:
-            col = 'k'
-            plt.plot(p.get_x(), p.get_y(), 'o',  markerfacecolor=col,
-                            markeredgecolor='k', markersize=6)
+colors = plt.cm.Spectral(np.linspace(0, 1, len(clusters)))
 
-plt.title('Our algorithm - estimated number of clusters: %d' % len(temp_list))
+for p in point_array:
+    if p.get_clusterID() == Point.NOISE:
+        col = 'k'
+    elif p.get_clusterID == Point.UNCLASSIFIED:
+        col = 'g'
+    else:
+        col = colors[p.get_clusterID() - 1]
+
+    plt.plot(p.get_x(), p.get_y(), 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=10)
+
+plt.title('Our algorithm - estimated number of clusters: %d' % len(clusters))
 plt.grid()
 plt.show()
-

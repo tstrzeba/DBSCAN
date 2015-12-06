@@ -48,7 +48,7 @@ class DBscan(object):
     def get_region(self, points, pt, eps):
         region = [] #list of point
 
-        for i in range(len(points)-1): #sprawdzić czy czase nie iteruje od 1 do N zamiast 0 do N-1
+        for i in range(len(points)): #sprawdzić czy czase nie iteruje od 1 do N zamiast 0 do N-1
             #print(points[i].show())
             distSquared = Point.distance_squared(pt, points[i])
             if distSquared <= eps:
@@ -58,20 +58,20 @@ class DBscan(object):
     def expand_cluster(self, points, pt, clusterID, eps, minPts):
         seeds = self.get_region(points, pt, eps)
 
-        if (len(seeds)-1) < minPts:
+        if (len(seeds)) < minPts:
             pt.set_clusterID(Point.NOISE)
             return False
 
         else:
-            for i in range(len(seeds)-1):
+            for i in range(len(seeds)):
                 seeds[i].set_clusterID(clusterID)
             seeds.remove(pt)
 
-            while (len(seeds)-1) > 0:
+            while (len(seeds)) > 0:
                 currentP = seeds[0]
                 result = self.get_region(points, currentP, eps)
                 if (len(result)-1) >= minPts:
-                    for i in range(len(result)-1):
+                    for i in range(len(result)):
                         resultP = result[i]
                         if resultP.get_clusterID() == Point.UNCLASSIFIED or resultP.get_clusterID() == Point.NOISE:
                             if resultP.get_clusterID() == Point.UNCLASSIFIED:
@@ -89,7 +89,7 @@ class DBscan(object):
         eps = eps**2
         clusterID = 1
 
-        for i in range(len(points)-1):
+        for i in range(len(points)):
             p = points[i]
             if p.get_clusterID() == Point.UNCLASSIFIED:
                 if self.expand_cluster(points, p, clusterID, eps, minPts):
@@ -111,51 +111,53 @@ class DBscan(object):
         return clusters
 
     def start(self, points, eps, minPts):
+        points = sorted(points, key=lambda x: x.get_x())
         clusters = self.get_cluster(points, eps, minPts)
         print("Number of points: "+str(len(points)))
 
 
         total = 0
 
-        for i in range(len(clusters)-1):#-1
-            count = len(clusters[i])-1
-            total += count
-            print("Cluster "+str(i+1) + " consists of the following " + str(count) + " points")
+        # for i in range(len(clusters)-1):#-1
+        #     count = len(clusters[i])-1
+        #     total += count
+        #     print("Cluster "+str(i+1) + " consists of the following " + str(count) + " points")
+        #
+        #    # print(len(clusters))
+        #     #print(clusters[2][1].show())
+        #     # for p in clusters[i]:
+        #     #     print(p.show())
+        #
+        # total = len(points)-total
+        # if total > 0:
+        #     print("Following points are NOISE or UNCLASIFIED: "+str(total))
+        #     for pp in points:
+        #         if pp.get_clusterID() == Point.NOISE:
+        #             print(pp.show())
+        # else:
+        #     print("There are no NOISE points")
 
-           # print(len(clusters))
-            #print(clusters[2][1].show())
-            # for p in clusters[i]:
-            #     print(p.show())
-
-        total = len(point_array)-total
-        if total > 0:
-            print("Following points are NOISE or UNCLASIFIED: "+str(total))
-            for pp in points:
-                if pp.get_clusterID() == Point.NOISE:
-                    print(pp.show())
-        else:
-            print("There are no NOISE points")
-
-
-
-
+        return clusters
 
 
 
 
-point_array = []
-for p in test_array.tablica:
-    pt = Point(p[0], p[1])
 
-    point_array.append(pt)
 
-db = DBscan(point_array)
 
-db.start(point_array, 4, 8)
 
-print("-----------------------------")
-for p in point_array:
-    print("clusterID="+str(p.get_clusterID())+" point: " + str(p.show()))
+# point_array = []
+# for p in test_array.tablica:
+#     pt = Point(p[0], p[1])
+#
+#     point_array.append(pt)
+# db = DBscan(point_array)
+#
+# db.start(point_array, 4, 8)
+#
+# print("-----------------------------")
+# for p in point_array:
+#     print("clusterID="+str(p.get_clusterID())+" point: " + str(p.show()))
 
 
 # tab = [ [2,3], [4,5]]
