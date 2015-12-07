@@ -86,8 +86,8 @@ import sys
 sys.path.append("../db_scan")
 from cluster_class import ClusterMap
 from point_class import PointArray
-from dbscan2 import DBscan
-from dbscan2 import Point
+from dbscan import DBscan
+from point import Point
 
 #################################################################################
 # Compute DBSCAN
