@@ -19,7 +19,7 @@ class DBscan(object):
 
         for i in range(len(points)):
             distSquared = Point.distance_squared(pt, points[i])
-            if distSquared <= eps:
+            if distSquared < eps:
                 region.append(points[i])
         return region
 
@@ -39,7 +39,7 @@ class DBscan(object):
             while (len(seeds)) > 0:
                 currentP = seeds[0]
                 result = self.get_region(points, currentP, eps)
-                if (len(result)-1) >= minPts:
+                if (len(result)) >= minPts:
                     for i in range(len(result)):
                         resultP = result[i]
                         if resultP.get_clusterID() == Point.UNCLASSIFIED or resultP.get_clusterID() == Point.NOISE:
@@ -54,7 +54,7 @@ class DBscan(object):
         if points is None:
             return None
 
-        clusters = []
+        clusters = list()
         eps = eps**2
         clusterID = 1
 
@@ -67,15 +67,18 @@ class DBscan(object):
         # sort to find out max ClusterId value
         temp_pt_lst = sorted(points, key=lambda x: x.ClusterId)
 
-        maxClusterId = temp_pt_lst[-1].get_clusterID()
-        if maxClusterId<1:
-            return clusters
-        for i in range(maxClusterId):
-            clusters.append([None])
+        # maxClusterId = temp_pt_lst[-1].get_clusterID()
+        # if maxClusterId<1:
+        #     return clusters
+        # for i in range(maxClusterId):
+        #     clusters.append([None])
 
         for p in points:
             if p.get_clusterID() > 0:
-                clusters[p.get_clusterID()-1].append(p)
+                if len(clusters) < p.get_clusterID():
+                    clusters.append([p])
+                else:
+                    clusters[p.get_clusterID()-1].append(p)
         return clusters
 
     # start function starts work of DBscan algorithm.

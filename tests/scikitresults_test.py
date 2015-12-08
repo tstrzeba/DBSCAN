@@ -1,15 +1,15 @@
 #################################################################################
 # generate data settings
 #################################################################################
-CENTERS = [[1, 1], [-1, -1], [1, -1], [5,5]]
-N_SAMPLES = 45
+CENTERS = [[-1, -1], [1, -1], [5, 5]]
+N_SAMPLES = 100
 CLUSTER_STD = 0.7
 RANDOM_STATE = 0
 
 #################################################################################
 # db_scan settings
 #################################################################################
-EPS = 0.2
+EPS = 0.6
 MIN_SAMPLES = 5
 
 #################################################################################
@@ -84,8 +84,6 @@ plt.grid()
 import sys
 
 sys.path.append("../db_scan")
-from cluster_class import ClusterMap
-from point_class import PointArray
 from dbscan import DBscan
 from point import Point
 
@@ -98,7 +96,7 @@ for x in xx:
     pt = Point(x[0], x[1])
     point_array.append(pt)
 # db = DBscan(point_array=parr, start_point_index= 0, cluster_map=clustmap, epsilon=EPS, min_neighbour=MIN_SAMPLES)
-db = DBscan(point_array=point_array)
+db = DBscan()
 clusters = db.start(points=point_array, eps=EPS, minPts=MIN_SAMPLES)
 
 #################################################################################
@@ -116,7 +114,7 @@ for p in point_array:
         col = colors[p.get_clusterID() - 1]
 
     plt.plot(p.get_x(), p.get_y(), 'o', markerfacecolor=col,
-                 markeredgecolor='k', markersize=10)
+             markeredgecolor='k', markersize=10)
 
 plt.title('Our algorithm - estimated number of clusters: %d' % len(clusters))
 plt.grid()
