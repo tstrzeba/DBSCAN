@@ -10,7 +10,7 @@ class DBscanUnitTest(object):
     """
 
     test_array = [[0, 100],  [0, 200],  [0, 275],  [100, 150],  [200, 100],  [250, 200],  [0, 300],[675, 700],  [675, 710],  [675, 720]]
-    proper_cluster = [1, 1, 1, -1, -1, -1, 1, 2, 2, 2]
+    proper_cluster = [-1, 1, 1, -1, -1, -1, 1, 2, 2, 2]
     dbscan = 0
 
     def __init__(self):
@@ -35,5 +35,5 @@ class DBscanUnitTest(object):
 
         return True
 
-# db = DBscanUnitTest()
-# print(db.start_test())
+db = DBscanUnitTest()
+print(db.start_test())
