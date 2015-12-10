@@ -1,10 +1,12 @@
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+import matplotlib.pyplot as plt
+
 import numpy as np
 
 
-def getDataForDB( categories, article_no ):
+def getDataForDB( categories, article_no, article_end = -1 ):
 
 
     #categories = ['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med']
@@ -42,10 +44,17 @@ def getDataForDB( categories, article_no ):
 
 
     #print( twenty_train.data[article_no])
+
+
+    if article_end <= article_no:
+        one_doc = [ twenty_train.data[article_no] ]
+    else:
+        one_doc = twenty_train.data[article_no:article_end]
+
     ## CREATE dictionary of words and its occurrences in the text
-    one_doc = [ twenty_train.data[article_no] ]
     count_vect = CountVectorizer()
-    X_train_counts = count_vect.fit_transform(one_doc) #tewnty_train.data[0]
+    X_train_counts = count_vect.fit_transform(one_doc) #tewnty_train.data[0]s
+
 
     #NOTE
     # dictionary: 'word' : index of word are storing in the count_vect.vocabulary_
@@ -78,8 +87,8 @@ def getDataForDB( categories, article_no ):
 
     # return vocabulary ( word its index ) and out matrix
 
-    return( count_vect.vocabulary_, X_train_tfidf )
-    #return ( count_vect.vocabulary_, X_train_counts)
+    #return( count_vect.vocabulary_, X_train_tfidf )
+    return ( count_vect.vocabulary_, X_train_counts)
 
 
 ## fit testing doc data ( fit vocabulary ( words and its indexes) )
@@ -98,9 +107,12 @@ def fitTestingDictionary( training_vocab, testing_vocab, testing_outTable):
     retTestingTab = []
     ## ad 1
     for key, index in training_vocab.items():
+
+
         if ( key in testing_vocab ):
             ## zamien index
             old_index = testing_vocab[key] - 12345678
+
             testing_vocab[key] = index
             ## laduj od razu z nowym indeksem do tablicy wyjsciowej
             retTestingTab.append([index, testing_outTable.getcol(old_index).toarray()[0][0]])
@@ -134,15 +146,18 @@ def convertTrainingRawData( training_rawData ):
     in_array_for_dbscan = []
 
     for i  in range(0,training_rawData.shape[1] ) :
-        in_array_for_dbscan.append([i, training_rawData.getcol(i).toarray()[0][0] ])
+        if training_rawData.getcol(i).toarray()[0][0] == 0:
+            continue
+        else:
+            in_array_for_dbscan.append([i, training_rawData.getcol(i).toarray()[0][0] ])
 
     return in_array_for_dbscan
 
 
 def getTextData():
     #use
-    (training_vocab, training_rawData) = getDataForDB(['comp.graphics'], 3)
-    (testing_vocab, testing_rawData) = getDataForDB(['comp.graphics'], 1)#['soc.religion.christian']
+    (training_vocab, training_rawData) = getDataForDB(['comp.graphics'], 0,5)
+    (testing_vocab, testing_rawData) = getDataForDB(['soc.religion.christian'],3)#['soc.religion.christian']
 
     print( "Training len: ", len(training_vocab), "\nTesting len: ", len(testing_vocab), "\n")
 
@@ -160,4 +175,18 @@ def getTextData():
 
     out_tab = [ x for x in training_tab + testing_tab ]
     #print( "\n\nMerged list:\n", sorted(out_tab, key = lambda x:x[0]))
+
+    #plot raw points
+    plt.plot([x[0] for x in training_tab], [y[1] for y in training_tab], 'ro')
+    plt.plot([x[0] for x in testing_tab], [y[1] for y in testing_tab], 'o')
+    #plt.plot([1,2,3], [4,5,6], 'o')
+    plt.show()
+
     return sorted(out_tab, key = lambda x:x[0])
+
+
+
+
+
+
+getTextData()
