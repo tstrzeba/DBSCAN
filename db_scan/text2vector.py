@@ -4,11 +4,12 @@ from sklearn.feature_extraction.text import TfidfTransformer
 import numpy as np
 
 
-def getDataForDB( article_no ):
+def getDataForDB( categories, article_no ):
 
 
     #categories = ['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med']
-    categories = ['comp.graphics']
+
+    #categories = ['comp.graphics']
 
 
     #LOAD ARTICLES
@@ -77,8 +78,8 @@ def getDataForDB( article_no ):
 
     # return vocabulary ( word its index ) and out matrix
 
-    #@return( count_vect.vocabulary_, X_train_tfidf )
-    return ( count_vect.vocabulary_, X_train_counts)
+    return( count_vect.vocabulary_, X_train_tfidf )
+    #return ( count_vect.vocabulary_, X_train_counts)
 
 
 ## fit testing doc data ( fit vocabulary ( words and its indexes) )
@@ -103,6 +104,9 @@ def fitTestingDictionary( training_vocab, testing_vocab, testing_outTable):
             testing_vocab[key] = index
             ## laduj od razu z nowym indeksem do tablicy wyjsciowej
             retTestingTab.append([index, testing_outTable.getcol(old_index).toarray()[0][0]])
+
+            #print( "\nTraining: (", key, " : ", index, " id in testing: ", old_index, " val = ", testing_outTable.getcol(old_index).toarray()[0][0])
+
         else:
             continue
 
@@ -135,21 +139,25 @@ def convertTrainingRawData( training_rawData ):
     return in_array_for_dbscan
 
 
+def getTextData():
+    #use
+    (training_vocab, training_rawData) = getDataForDB(['comp.graphics'], 3)
+    (testing_vocab, testing_rawData) = getDataForDB(['comp.graphics'], 1)#['soc.religion.christian']
 
-#use
-(training_vocab, training_rawData) = getDataForDB(0)
-(testing_vocab, testing_rawData) = getDataForDB(1)
+    print( "Training len: ", len(training_vocab), "\nTesting len: ", len(testing_vocab), "\n")
 
-print( "Training len: ", len(training_vocab), "\nTesting len: ", len(testing_vocab), "\n")
+    training_tab = convertTrainingRawData( training_rawData )
+    testing_tab = fitTestingDictionary(training_vocab, testing_vocab, testing_rawData)
 
-training_tab = convertTrainingRawData( training_rawData )
-testing_tab = fitTestingDictionary(training_vocab, testing_vocab, testing_rawData)
+    print ( "Training: rawData\n", training_rawData )
+    print( "\n\n")
 
-print ( "Training: rawData\n", training_rawData )
-print( "\n\n")
+    print ( "Testing rawData\n", testing_rawData)
 
-print ( "Testing rawData\n", testing_rawData)
+    print( "\n\nTesting out\n", testing_tab)
 
-print( "\n\nTesting out\n", testing_tab)
+    print( "\n\nTraining out\n", training_tab)
 
-print( "\n\nTraining out\n", training_tab)
+    out_tab = [ x for x in training_tab + testing_tab ]
+    #print( "\n\nMerged list:\n", sorted(out_tab, key = lambda x:x[0]))
+    return sorted(out_tab, key = lambda x:x[0])
