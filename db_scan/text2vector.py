@@ -230,34 +230,17 @@ def getTextData():
     # out_tab.append(training_tab)
     # out_tab.append(testing_tab)
 
-    #return sorted(out_tab, key=lambda x: x[0])
 
+
+    # return for raw plotting
+    #return training_tab , testing_tab
+
+    # return for db scan
     return [ [i[0], i[1]/math.sqrt(30)] for i in training_tab if i[1]/math.sqrt(30) >= 2 ] , [ i for i in testing_tab if i[1] >= 2 ] #'''+ [ i for i in testing_tab if i[1] >= 2 ]'''
 
-# #
-# data = getTextData()
-# plt.plot( [x[0] for x in data], [x[1] for x in data], 'o')
+# # Raw Plotting
+# training_data, test_data = getTextData()
+# plt.plot( [x[0] for x in training_data], [x[1] for x in training_data], 'o')
+# plt.plot( [x[0] for x in test_data], [x[1] for x in test_data], 'o')
 # plt.show()
 
-# # plot result of 5 different articles
-# (test1_vocab, test1_rawData) = getDataForDB(['comp.graphics'], 0,20)
-# # (test2_vocab, test2_rawData) = getDataForDB(['comp.graphics'], 2)
-# # (test3_vocab, test3_rawData) = getDataForDB(['comp.graphics'], 5)
-# # (test4_vocab, test4_rawData) = getDataForDB(['comp.graphics'], 9)
-# # (test5_vocab, test5_rawData) = getDataForDB(['comp.graphics'], 13)
-# print( test1_rawData)
-#
-# test1_tab = convertTrainingRawData( test1_rawData )
-# # test2_tab = convertTrainingRawData( test2_rawData  )
-# # test3_tab = convertTrainingRawData( test3_rawData  )
-# # test4_tab = convertTrainingRawData( test4_rawData  )
-# # test5_tab = convertTrainingRawData( test5_rawData  )
-#
-#
-# plt.plot([x[0] for x in test1_tab], [y[1] for y in test1_tab], 'ro');
-# #plt.plot([x for x in range(len(test1_tab))], sorted([y[1] for y in test1_tab], reverse=True), 'o')
-# # plt.plot([x for x in range(len(test2_tab))], sorted([y[1] for y in test2_tab], reverse=True), 'o')
-# # plt.plot([x for x in range(len(test3_tab))], sorted([y[1] for y in test3_tab], reverse=True), 'o')
-# # plt.plot([x for x in range(len(test4_tab))], sorted([y[1] for y in test4_tab], reverse=True), 'o')
-# # plt.plot([x for x in range(len(test5_tab))], sorted([y[1] for y in test5_tab], reverse=True), 'o')
-# plt.show()
